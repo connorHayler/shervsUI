@@ -1,4 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request
+import users
+from passenger import Passenger
 
 app = Flask(__name__)
 
@@ -7,7 +9,7 @@ app = Flask(__name__)
 def login():
     error = None
     if request.method == "POST":
-        if request.form["username"] != "admin" or request.form["password"] != "admin":
+        if users.login(request.form["username"], request.form["password"]) is False:
             error = "That username and passport combination does not match"
         else:
             return redirect(url_for("homepage"))
@@ -16,7 +18,19 @@ def login():
 
 @app.route("/homepage")
 def homepage():
-    return render_template("homePage.html")
+    return render_template("homepage.html")
+
+
+@app.route("/createpassenger", methods=["GET", "POST"])
+def create_passenger():
+    if request.method == "POST":
+        passenger = Passenger(request.form["fname"],
+                              request.form["lname"],
+                              request.form["passport"],
+                              request.form["age"])
+        passenger.add_record()
+        return redirect(url_for("homepage"))
+    return render_template('creatingpassenger.html')
 
 
 if __name__ == "__main__":
