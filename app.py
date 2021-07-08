@@ -1,6 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, request
+
+import passenger
 import users
-from passenger import Passenger
+from passenger import Passenger, get_passenger
+from flask_table import Table, Col
 
 app = Flask(__name__)
 
@@ -27,10 +30,25 @@ def create_passenger():
         passenger = Passenger(request.form["fname"],
                               request.form["lname"],
                               request.form["passport"],
-                              request.form["age"])
+                               request.form["age"])
         passenger.add_record()
         return redirect(url_for("homepage"))
     return render_template('creatingpassenger.html')
+
+@app.route("/passengerrecords")
+def passenger_record():
+    record = Passenger.get_passenger()
+    tag = "<tbody>"
+    string = ""
+    for passenger in record:
+        temp = f"<tr>"\
+               f"<td></td>"\
+               f"</tr>"
+
+
+
+
+
 
 
 if __name__ == "__main__":

@@ -22,3 +22,17 @@ class Passenger:
             data["passenger"].append(self.dic)
             file.seek(0)
             json.dump(data, file, indent=4)
+
+
+def get_passenger():
+    report_list = []
+    with open("passenger_records.json", "r") as file:
+        json_file = json.load(file)
+        for passenger in json_file["passenger"]:
+            fname = passenger["fName"]
+            lname = passenger["lName"]
+            passport = passenger["passport"]
+            age = passenger["age"]
+            report_list.append((fname, lname, passport, age))
+    return report_list
+
